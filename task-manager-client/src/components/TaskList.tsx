@@ -11,7 +11,7 @@ interface Task {
 }
 
 const TaskList: React.FC<{ projectId: string }> = ({ projectId }) => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Required<Task[]>>([]);
 
   useEffect(() => {
     fetch(`http://localhost:3001/api/projects/${projectId}/tasks`)
@@ -19,7 +19,7 @@ const TaskList: React.FC<{ projectId: string }> = ({ projectId }) => {
       .then((data) => setTasks(data));
   }, [projectId]);
 
-  return (
+ return (
     <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg p-6">
       <nav className="flex space-x-4 mb-6">
         <Link to="/create-task" className="text-blue-500 hover:underline">
@@ -29,21 +29,42 @@ const TaskList: React.FC<{ projectId: string }> = ({ projectId }) => {
           Update Task
         </Link>
       </nav>
-      <h2 className="text-2xl font-semibold text-gray-700 mb-4">Tasks for Project {projectId}</h2>
-      <ul className="space-y-4">
-        {tasks.map((task) => (
-          <li key={task.id} className="p-4 bg-gray-50 border rounded-lg">
-            <strong className="text-lg">{task.title}</strong>
-            {task.description && <p className="text-sm text-gray-600">{task.description}</p>}
-            {task.status && <p className="text-sm text-gray-600">Status: {task.status}</p>}
-            {task.due_date && <p className="text-sm text-gray-600">Due Date: {task.due_date}</p>}
-            {task.assigned_to && <p className="text-sm text-gray-600">Assigned To: {task.assigned_to}</p>}
-          </li>
-        ))}
-      </ul>
+      <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+        Tasks for Project {projectId}
+      </h2>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse border border-gray-200 rounded-lg">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="border border-gray-300 px-4 py-2 text-left">Title</th>
+              <th className="border border-gray-300 px-4 py-2 text-left">Description</th>
+              <th className="border border-gray-300 px-4 py-2 text-left">Status</th>
+              <th className="border border-gray-300 px-4 py-2 text-left">Due Date</th>
+              <th className="border border-gray-300 px-4 py-2 text-left">Assigned To</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tasks.map((task) => (
+              <tr key={task.id} className="border border-gray-300 odd:bg-white even:bg-gray-50">
+                <td className="border border-gray-300 px-4 py-2 font-semibold">{task.title}</td>
+                <td className="border border-gray-300 px-4 py-2 text-sm text-gray-600">
+                  {task.description || "-"}
+                </td>
+                <td className="border border-gray-300 px-4 py-2 text-sm text-gray-600">
+                  {task.status || "-"}
+                </td>
+                <td className="border border-gray-300 px-4 py-2 text-sm text-gray-600">
+                  {task.due_date || "-"}
+                </td>
+                <td className="border border-gray-300 px-4 py-2 text-sm text-gray-600">
+                  {task.assigned_to || "-"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
-
-    
   );
 };
 
