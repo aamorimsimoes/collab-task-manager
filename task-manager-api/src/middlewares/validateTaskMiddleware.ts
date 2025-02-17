@@ -13,7 +13,7 @@ const validateTaskMiddleware = (req: Request, res: Response, next: NextFunction)
     return;
   }
 
-  next(); // Call next() only if validation passes
+  next(); // Proceed to controller
 };
 
 export default validateTaskMiddleware;

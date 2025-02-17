@@ -4,14 +4,8 @@ import { supabase } from '../index';
 // Correctly typed controller function
 export const createTask = async (req: Request, res: Response): Promise<void> => {
   try {
-    console.log("Headers:", req.headers);  // Debug headers
-    console.log("Received request body:", req.body);  // Debug body
-
     const { projectId } = req.params;
     const { title, description, due_date, assigned_to } = req.body;
-
-    // Log request body to debug
-    // console.log("Received request body:", req.body);
 
     // Validate required fields
     if (!title) {
